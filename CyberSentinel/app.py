@@ -8,6 +8,7 @@ import sys
 import re
 from urllib.parse import urlparse
 import streamlit as st
+import streamlit.components.v1 as components
 
 # Ensure project root is in sys.path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -793,759 +794,1016 @@ elif st.session_state.active_page == "safety_tips":
         section[data-testid="stMain"] > div.main > div.block-container,
         .main > div.block-container,
         .main .block-container {
-            max-width: 1200px !important;
+            max-width: 1240px !important;
             width: 100% !important;
             margin-left: auto !important;
             margin-right: auto !important;
+            padding-left: 2rem !important;
+            padding-right: 2rem !important;
         }
         [data-testid="stMainBlockContainer"] {
-            max-width: 1200px !important;
+            max-width: 1240px !important;
             margin-left: auto !important;
             margin-right: auto !important;
         }
-
-        /* ---- Safety Tips Page ---- */
-        .st-hero-split {
-            display: grid;
-            grid-template-columns: 1.15fr 0.85fr;
-            gap: 3rem;
-            align-items: center;
-            padding: 2rem 0 3.5rem 0;
-        }
-
-        .st-hero-left h1 {
-            font-size: clamp(2.8rem, 5.5vw, 4.2rem);
-            font-weight: 900;
-            line-height: 1.06;
-            letter-spacing: -0.035em;
-            color: #F5F5F5;
-            margin: 0 0 1.25rem 0;
-        }
-
-        .st-hero-left h1 span {
-            color: #FFD21F;
-        }
-
-        .st-hero-left p {
-            font-size: 1.2rem;
-            color: #A6A6A6;
-            line-height: 1.6;
-            max-width: 480px;
-        }
-
-        .st-hero-right {
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
-        }
-
-        /* Speech bubble styling */
-        .speech-bubble-grandpa {
-            position: absolute;
-            top: 10px;
-            right: 12px;
-            background: #1A1A1A;
-            border: 2px solid #FFD21F;
-            border-radius: 14px 14px 4px 14px;
-            padding: 0.7rem 1.1rem;
-            font-size: 0.95rem;
-            font-weight: 800;
-            color: #FFD21F;
-            letter-spacing: 0.02em;
-            white-space: nowrap;
-            z-index: 10;
-        }
-
-        .speech-bubble-grandpa::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            right: 16px;
-            border: 6px solid transparent;
-            border-top-color: #FFD21F;
-        }
-
-        .speech-bubble-grandma {
-            position: absolute;
-            top: 18px;
-            left: 10px;
-            background: #1A1A1A;
-            border: 2px solid #A6A6A6;
-            border-radius: 14px 14px 14px 4px;
-            padding: 0.7rem 1.1rem;
-            font-size: 0.95rem;
-            font-weight: 700;
-            color: #F5F5F5;
-            letter-spacing: 0.01em;
-            max-width: 220px;
-            line-height: 1.45;
-            z-index: 10;
-        }
-
-        /* Section dividers */
-        .tip-section-divider {
-            width: 100%;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, #292929, transparent);
-            margin: 3.5rem 0;
-        }
-
-        /* Grandpa Warning Section */
-        .grandpa-warning-section {
-            display: grid;
-            grid-template-columns: 0.9fr 1.3fr;
-            gap: 3.5rem;
-            align-items: center;
-            padding: 2.5rem 0;
-        }
-
-        .grandpa-char-col {
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .grandpa-warning-text h2 {
-            font-size: clamp(1.8rem, 3.5vw, 2.5rem);
-            font-weight: 900;
-            letter-spacing: -0.025em;
-            color: #F5F5F5;
-            margin: 0 0 0.4rem 0;
-        }
-
-        .grandpa-warning-text .grandpa-quote {
-            font-size: clamp(1.3rem, 2.5vw, 1.8rem);
-            font-weight: 800;
-            color: #FFD21F;
-            font-style: italic;
-            margin-bottom: 1.75rem;
-        }
-
-        .grandpa-warning-text p {
-            font-size: 1.15rem;
-            color: #A6A6A6;
-            line-height: 1.65;
-        }
-
-        /* Warning sign visual */
-        .warning-sign-visual {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            background: #181818;
-            border: 1.5px solid #FFD21F33;
-            border-radius: 14px;
-            padding: 1.15rem 1.4rem;
-            margin-bottom: 1.35rem;
-        }
-
-        .warning-sign-visual .warn-icon {
-            font-size: 1.85rem;
-            flex-shrink: 0;
-        }
-
-        .warning-sign-visual .warn-text {
-            font-size: 1.05rem;
-            font-weight: 600;
-            color: #F5F5F5;
-            line-height: 1.45;
-        }
-
-        /* Grandma Section */
-        .grandma-tips-section {
-            display: grid;
-            grid-template-columns: 1.35fr 0.85fr;
-            gap: 3.5rem;
-            align-items: start;
-            padding: 2.5rem 0;
-        }
-
-        .grandma-tips-col h2 {
-            font-size: clamp(1.6rem, 3vw, 2.3rem);
-            font-weight: 900;
-            letter-spacing: -0.025em;
-            color: #F5F5F5;
-            margin: 0 0 0.4rem 0;
-        }
-
-        .grandma-tips-col .grandma-quote {
-            font-size: 1.15rem;
-            color: #A6A6A6;
-            font-style: italic;
-            margin-bottom: 2rem;
-            line-height: 1.55;
-        }
-
-        /* Tip Cards */
-        .tip-card {
-            display: flex;
-            gap: 1.25rem;
-            background: #111111;
-            border: 1px solid #282828;
-            border-radius: 16px;
-            padding: 1.35rem 1.5rem;
-            margin-bottom: 1rem;
-            align-items: flex-start;
-            transition: border-color 0.2s ease;
-        }
-
-        .tip-card:hover {
-            border-color: #FFD21F44;
-        }
-
-        .tip-num {
-            font-size: 0.85rem;
-            font-weight: 900;
-            color: #FFD21F;
-            letter-spacing: 0.06em;
-            text-transform: uppercase;
-            padding-top: 0.2rem;
-            min-width: 30px;
-        }
-
-        .tip-body h3 {
-            font-size: 1.08rem;
-            font-weight: 800;
-            color: #F5F5F5;
-            margin: 0 0 0.35rem 0;
-            letter-spacing: 0.01em;
-        }
-
-        .tip-body p {
-            font-size: 0.98rem;
-            color: #A6A6A6;
-            line-height: 1.55;
-            margin: 0;
-        }
-
-        .grandma-char-col {
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        /* Final CTA Section */
-        .final-cta-section {
-            text-align: center;
-            padding: 4rem 0 2.5rem 0;
-            border-top: 1px solid #1E1E1E;
-        }
-
-        .final-cta-section .cta-eyebrow {
-            font-size: 0.92rem;
-            font-weight: 700;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            color: #A6A6A6;
-            margin-bottom: 0.6rem;
-        }
-
-        .final-cta-section h2 {
-            font-size: clamp(2.2rem, 4.5vw, 3.2rem);
-            font-weight: 900;
-            letter-spacing: -0.03em;
-            color: #F5F5F5;
-            margin: 0 0 0.5rem 0;
-        }
-
-        .final-cta-section h2 span {
-            color: #FFD21F;
-        }
-
-        .final-cta-section p {
-            font-size: 1.15rem;
-            color: #A6A6A6;
-            margin: 0 0 2.5rem 0;
-        }
-
-        /* Grandpa says callout */
-        .grandpa-final-callout {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.85rem;
-            background: #181818;
-            border: 1.5px solid #FFD21F33;
-            border-radius: 50px;
-            padding: 0.75rem 1.6rem;
-            margin-bottom: 1.75rem;
-        }
-
-        .grandpa-final-callout .callout-label {
-            font-size: 0.85rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            color: #FFD21F;
-        }
-
-        .grandpa-final-callout .callout-text {
-            font-size: 1.05rem;
-            color: #F5F5F5;
-            font-weight: 600;
-            font-style: italic;
-        }
-
-        /* Responsive mobile adjustments */
-        @media (max-width: 768px) {
-            .st-hero-split,
-            .grandpa-warning-section,
-            .grandma-tips-section {
-                grid-template-columns: 1fr !important;
-            }
-            .st-hero-right,
-            .grandpa-char-col,
-            .grandma-char-col {
-                order: -1;
-            }
-        }
+        /* Hide the Streamlit iframe border */
+        iframe { border: none !important; }
     </style>
     """, unsafe_allow_html=True)
 
     # ==================================================================
-    # GRANDPA SVG CHARACTER — Dark CyberSentinel style
+    # GRANDPA SVG CHARACTER
     # ==================================================================
-    GRANDPA_SVG = """
-    <svg viewBox="0 0 320 420" xmlns="http://www.w3.org/2000/svg" width="260" style="filter: drop-shadow(0 20px 60px rgba(0,0,0,0.85));">
-      <!-- Subtle spotlight glow behind character -->
-      <defs>
-        <radialGradient id="gpSpot" cx="50%" cy="40%" r="50%">
-          <stop offset="0%" stop-color="#FFD21F" stop-opacity="0.08"/>
-          <stop offset="100%" stop-color="#000" stop-opacity="0"/>
-        </radialGradient>
-        <radialGradient id="skinG" cx="40%" cy="35%" r="60%">
-          <stop offset="0%" stop-color="#f5c8a8"/>
-          <stop offset="100%" stop-color="#d49070"/>
-        </radialGradient>
-        <radialGradient id="cheekG" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stop-color="#e8a080" stop-opacity="0.6"/>
-          <stop offset="100%" stop-color="#e8a080" stop-opacity="0"/>
-        </radialGradient>
-      </defs>
-      <!-- Background glow -->
-      <ellipse cx="160" cy="180" rx="140" ry="160" fill="url(#gpSpot)"/>
-
-      <!-- BODY / DARK OUTFIT -->
-      <!-- Torso dark charcoal jacket -->
-      <ellipse cx="160" cy="360" rx="90" ry="70" fill="#1A1A1A"/>
-      <rect x="80" y="300" width="160" height="100" rx="18" fill="#1C1C1C"/>
-      <!-- Shirt collar / white shirt peek -->
-      <path d="M145 302 Q160 295 175 302 L172 320 Q160 315 148 320 Z" fill="#EBEBEB"/>
-      <!-- Dark jacket lapels -->
-      <path d="M145 302 L110 340 L130 340 L148 320 Z" fill="#252525"/>
-      <path d="M175 302 L210 340 L190 340 L172 320 Z" fill="#252525"/>
-      <!-- Bow tie (dark with tiny yellow) -->
-      <path d="M148 310 L160 318 L172 310 L165 303 L160 307 L155 303 Z" fill="#1a1a1a"/>
-      <circle cx="160" cy="312" r="3" fill="#FFD21F"/>
-      <!-- Dark suspenders -->
-      <rect x="143" y="305" width="7" height="75" rx="3" fill="#2A2A2A" transform="rotate(-5, 143 305)"/>
-      <rect x="170" y="305" width="7" height="75" rx="3" fill="#2A2A2A" transform="rotate(5, 177 305)"/>
-      <!-- Yellow suspender clips -->
-      <rect x="139" y="340" width="14" height="8" rx="2" fill="#FFD21F"/>
-      <rect x="167" y="340" width="14" height="8" rx="2" fill="#FFD21F"/>
-      <!-- Yellow shield badge on chest -->
-      <path d="M152 330 L160 326 L168 330 L168 340 Q160 345 152 340 Z" fill="#FFD21F"/>
-      <path d="M155 334 L158 338 L165 331" stroke="#0A0A0A" stroke-width="2" fill="none" stroke-linecap="round"/>
-
-      <!-- STOP HAND (raised right arm) -->
-      <!-- Upper arm -->
-      <rect x="205" y="295" width="35" height="55" rx="17" fill="#f0b896" transform="rotate(-25 222 322)"/>
-      <!-- Forearm / stop hand rotated up -->
-      <g transform="translate(225, 225) rotate(15)">
-        <!-- Palm -->
-        <rect x="-22" y="-10" width="44" height="50" rx="14" fill="#f0b896"/>
-        <!-- Fingers spread slightly -->
-        <rect x="-20" y="-30" width="10" height="32" rx="5" fill="#f0b896"/>
-        <rect x="-8" y="-36" width="10" height="34" rx="5" fill="#f0b896"/>
-        <rect x="4" y="-34" width="10" height="32" rx="5" fill="#f0b896"/>
-        <rect x="16" y="-28" width="9" height="28" rx="4" fill="#f0b896"/>
-        <!-- Knuckle lines -->
-        <line x1="-19" y1="-2" x2="-19" y2="2" stroke="#c89070" stroke-width="1.5" stroke-linecap="round"/>
-        <line x1="-7" y1="-4" x2="-7" y2="0" stroke="#c89070" stroke-width="1.5" stroke-linecap="round"/>
-        <line x1="5" y1="-3" x2="5" y2="1" stroke="#c89070" stroke-width="1.5" stroke-linecap="round"/>
-        <line x1="16" y1="-1" x2="16" y2="3" stroke="#c89070" stroke-width="1.5" stroke-linecap="round"/>
-      </g>
-      <!-- Left arm relaxed -->
-      <rect x="75" y="295" width="33" height="52" rx="16" fill="#1C1C1C" transform="rotate(15 91 321)"/>
-
-      <!-- NECK -->
-      <rect x="148" y="272" width="24" height="35" rx="10" fill="#e0a880"/>
-
-      <!-- HEAD -->
-      <!-- Head shape - rounded square, mature -->
-      <rect x="105" y="155" width="110" height="125" rx="38" fill="url(#skinG)"/>
-      <!-- Forehead wrinkle lines -->
-      <path d="M125 175 Q140 170 155 173" stroke="#c49070" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-      <path d="M165 172 Q175 169 185 173" stroke="#c49070" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-      <!-- Jowls / cheeks -->
-      <ellipse cx="118" cy="225" rx="14" ry="16" fill="#e09878" opacity="0.5"/>
-      <ellipse cx="202" cy="225" rx="14" ry="16" fill="#e09878" opacity="0.5"/>
-      <!-- Cheek flush -->
-      <ellipse cx="122" cy="228" rx="10" ry="7" fill="url(#cheekG)"/>
-      <ellipse cx="198" cy="228" rx="10" ry="7" fill="url(#cheekG)"/>
-
-      <!-- GRUMPY FURROWED BROW -->
-      <!-- Brow shadow -->
-      <rect x="108" y="190" width="104" height="22" rx="11" fill="#c08060" opacity="0.3"/>
-      <!-- Left brow — furrowed down-inward -->
-      <path d="M112 200 Q130 188 148 196" stroke="#4a3020" stroke-width="5.5" fill="none" stroke-linecap="round"/>
-      <!-- Right brow — furrowed down-inward -->
-      <path d="M172 196 Q188 188 205 200" stroke="#4a3020" stroke-width="5.5" fill="none" stroke-linecap="round"/>
-      <!-- Brow crease between brows -->
-      <path d="M152 198 L160 202 L168 198" stroke="#b07850" stroke-width="2" fill="none" stroke-linecap="round"/>
-
-      <!-- EYES -->
-      <!-- Left eye socket shadow -->
-      <ellipse cx="138" cy="215" rx="17" ry="13" fill="#c09070" opacity="0.2"/>
-      <!-- Left eyeball -->
-      <ellipse cx="138" cy="216" rx="12" ry="11" fill="white"/>
-      <ellipse cx="139" cy="217" rx="7" ry="7" fill="#3a6090"/>
-      <circle cx="140" cy="216" r="4.5" fill="#1a2030"/>
-      <circle cx="142" cy="214" r="1.5" fill="white"/>
-      <!-- Left eyelid (half-closed, skeptical) -->
-      <path d="M126 212 Q138 206 150 212" fill="#e0a880" stroke="#e0a880" stroke-width="0.5"/>
-      <!-- Right eye socket shadow -->
-      <ellipse cx="182" cy="215" rx="17" ry="13" fill="#c09070" opacity="0.2"/>
-      <!-- Right eyeball -->
-      <ellipse cx="182" cy="216" rx="12" ry="11" fill="white"/>
-      <ellipse cx="183" cy="217" rx="7" ry="7" fill="#3a6090"/>
-      <circle cx="184" cy="216" r="4.5" fill="#1a2030"/>
-      <circle cx="186" cy="214" r="1.5" fill="white"/>
-      <!-- Right eyelid (half-closed) -->
-      <path d="M170 212 Q182 206 194 212" fill="#e0a880" stroke="#e0a880" stroke-width="0.5"/>
-
-      <!-- THICK BLACK GLASSES — distinctive feature -->
-      <!-- Left lens frame -->
-      <rect x="118" y="205" width="42" height="28" rx="6" fill="none" stroke="#1a1a1a" stroke-width="6"/>
-      <!-- Right lens frame -->
-      <rect x="160" y="205" width="42" height="28" rx="6" fill="none" stroke="#1a1a1a" stroke-width="6"/>
-      <!-- Bridge between lenses -->
-      <rect x="158" y="215" width="6" height="6" rx="1" fill="#1a1a1a"/>
-      <!-- Left temple arm -->
-      <line x1="118" y1="218" x2="105" y2="222" stroke="#1a1a1a" stroke-width="5" stroke-linecap="round"/>
-      <!-- Right temple arm -->
-      <line x1="202" y1="218" x2="215" y2="222" stroke="#1a1a1a" stroke-width="5" stroke-linecap="round"/>
-      <!-- Lens tint (slightly dark, subtle) -->
-      <rect x="121" y="208" width="36" height="22" rx="4" fill="#111122" opacity="0.12"/>
-      <rect x="163" y="208" width="36" height="22" rx="4" fill="#111122" opacity="0.12"/>
-
-      <!-- NOSE — large bulbous -->
-      <ellipse cx="160" cy="238" rx="14" ry="12" fill="#d49878"/>
-      <circle cx="153" cy="242" r="5" fill="#c48868"/>
-      <circle cx="167" cy="242" r="5" fill="#c48868"/>
-
-      <!-- MOUTH — grumpy frown -->
-      <path d="M138 260 Q148 255 160 257 Q172 255 182 260" stroke="#9a6040" stroke-width="3" fill="none" stroke-linecap="round"/>
-      <!-- Chin crease -->
-      <path d="M150 270 Q160 275 170 270" stroke="#c09070" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-
-      <!-- WHITE HAIR -->
-      <!-- Main hair mass -->
-      <ellipse cx="160" cy="155" rx="58" ry="32" fill="#E8E8E8"/>
-      <!-- Side tufts -->
-      <ellipse cx="108" cy="175" rx="22" ry="30" fill="#E0E0E0"/>
-      <ellipse cx="212" cy="175" rx="22" ry="30" fill="#E0E0E0"/>
-      <!-- Top fluffy section -->
-      <path d="M120 155 Q130 130 145 140 Q155 125 175 140 Q190 130 200 155" fill="#EBEBEB"/>
-      <!-- Hair highlight -->
-      <path d="M138 143 Q155 133 175 143" stroke="white" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.6"/>
-
-      <!-- Ear left -->
-      <ellipse cx="106" cy="220" rx="10" ry="14" fill="#d4946a"/>
-      <ellipse cx="107" cy="220" rx="6" ry="9" fill="#c48060"/>
-      <!-- Ear right -->
-      <ellipse cx="214" cy="220" rx="10" ry="14" fill="#d4946a"/>
-      <ellipse cx="213" cy="220" rx="6" ry="9" fill="#c48060"/>
-    </svg>
-    """
+    GRANDPA_SVG = """<svg viewBox="0 0 320 420" xmlns="http://www.w3.org/2000/svg" width="220" style="filter: drop-shadow(0 20px 60px rgba(0,0,0,0.85));">
+<defs>
+<radialGradient id="gpSpot" cx="50%" cy="40%" r="50%"><stop offset="0%" stop-color="#FFD21F" stop-opacity="0.08"/><stop offset="100%" stop-color="#000" stop-opacity="0"/></radialGradient>
+<radialGradient id="skinG" cx="40%" cy="35%" r="60%"><stop offset="0%" stop-color="#f5c8a8"/><stop offset="100%" stop-color="#d49070"/></radialGradient>
+<radialGradient id="cheekG" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#e8a080" stop-opacity="0.6"/><stop offset="100%" stop-color="#e8a080" stop-opacity="0"/></radialGradient>
+</defs>
+<ellipse cx="160" cy="180" rx="140" ry="160" fill="url(#gpSpot)"/>
+<ellipse cx="160" cy="360" rx="90" ry="70" fill="#1A1A1A"/>
+<rect x="80" y="300" width="160" height="100" rx="18" fill="#1C1C1C"/>
+<path d="M145 302 Q160 295 175 302 L172 320 Q160 315 148 320 Z" fill="#EBEBEB"/>
+<path d="M145 302 L110 340 L130 340 L148 320 Z" fill="#252525"/>
+<path d="M175 302 L210 340 L190 340 L172 320 Z" fill="#252525"/>
+<path d="M148 310 L160 318 L172 310 L165 303 L160 307 L155 303 Z" fill="#1a1a1a"/>
+<circle cx="160" cy="312" r="3" fill="#FFD21F"/>
+<rect x="143" y="305" width="7" height="75" rx="3" fill="#2A2A2A" transform="rotate(-5, 143 305)"/>
+<rect x="170" y="305" width="7" height="75" rx="3" fill="#2A2A2A" transform="rotate(5, 177 305)"/>
+<rect x="139" y="340" width="14" height="8" rx="2" fill="#FFD21F"/>
+<rect x="167" y="340" width="14" height="8" rx="2" fill="#FFD21F"/>
+<path d="M152 330 L160 326 L168 330 L168 340 Q160 345 152 340 Z" fill="#FFD21F"/>
+<path d="M155 334 L158 338 L165 331" stroke="#0A0A0A" stroke-width="2" fill="none" stroke-linecap="round"/>
+<g class="grandpa-hand">
+<rect x="205" y="295" width="35" height="55" rx="17" fill="#f0b896" transform="rotate(-25 222 322)"/>
+<g transform="translate(225, 225) rotate(15)">
+<rect x="-22" y="-10" width="44" height="50" rx="14" fill="#f0b896"/>
+<rect x="-20" y="-30" width="10" height="32" rx="5" fill="#f0b896"/>
+<rect x="-8" y="-36" width="10" height="34" rx="5" fill="#f0b896"/>
+<rect x="4" y="-34" width="10" height="32" rx="5" fill="#f0b896"/>
+<rect x="16" y="-28" width="9" height="28" rx="4" fill="#f0b896"/>
+</g>
+</g>
+<rect x="75" y="295" width="33" height="52" rx="16" fill="#1C1C1C" transform="rotate(15 91 321)"/>
+<rect x="148" y="272" width="24" height="35" rx="10" fill="#e0a880"/>
+<rect x="105" y="155" width="110" height="125" rx="38" fill="url(#skinG)"/>
+<path d="M125 175 Q140 170 155 173" stroke="#c49070" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+<path d="M165 172 Q175 169 185 173" stroke="#c49070" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+<ellipse cx="118" cy="225" rx="14" ry="16" fill="#e09878" opacity="0.5"/>
+<ellipse cx="202" cy="225" rx="14" ry="16" fill="#e09878" opacity="0.5"/>
+<ellipse cx="122" cy="228" rx="10" ry="7" fill="url(#cheekG)"/>
+<ellipse cx="198" cy="228" rx="10" ry="7" fill="url(#cheekG)"/>
+<rect x="108" y="190" width="104" height="22" rx="11" fill="#c08060" opacity="0.3"/>
+<path d="M112 200 Q130 188 148 196" stroke="#4a3020" stroke-width="5.5" fill="none" stroke-linecap="round"/>
+<path d="M172 196 Q188 188 205 200" stroke="#4a3020" stroke-width="5.5" fill="none" stroke-linecap="round"/>
+<path d="M152 198 L160 202 L168 198" stroke="#b07850" stroke-width="2" fill="none" stroke-linecap="round"/>
+<ellipse cx="138" cy="215" rx="17" ry="13" fill="#c09070" opacity="0.2"/>
+<ellipse cx="138" cy="216" rx="12" ry="11" fill="white"/>
+<ellipse cx="139" cy="217" rx="7" ry="7" fill="#3a6090"/>
+<circle cx="140" cy="216" r="4.5" fill="#1a2030"/>
+<circle cx="142" cy="214" r="1.5" fill="white"/>
+<path d="M126 212 Q138 206 150 212" fill="#e0a880" stroke="#e0a880" stroke-width="0.5"/>
+<ellipse cx="182" cy="215" rx="17" ry="13" fill="#c09070" opacity="0.2"/>
+<ellipse cx="182" cy="216" rx="12" ry="11" fill="white"/>
+<ellipse cx="183" cy="217" rx="7" ry="7" fill="#3a6090"/>
+<circle cx="184" cy="216" r="4.5" fill="#1a2030"/>
+<circle cx="186" cy="214" r="1.5" fill="white"/>
+<path d="M170 212 Q182 206 194 212" fill="#e0a880" stroke="#e0a880" stroke-width="0.5"/>
+<rect x="118" y="205" width="42" height="28" rx="6" fill="none" stroke="#1a1a1a" stroke-width="6"/>
+<rect x="160" y="205" width="42" height="28" rx="6" fill="none" stroke="#1a1a1a" stroke-width="6"/>
+<rect x="158" y="215" width="6" height="6" rx="1" fill="#1a1a1a"/>
+<line x1="118" y1="218" x2="105" y2="222" stroke="#1a1a1a" stroke-width="5" stroke-linecap="round"/>
+<line x1="202" y1="218" x2="215" y2="222" stroke="#1a1a1a" stroke-width="5" stroke-linecap="round"/>
+<rect x="121" y="208" width="36" height="22" rx="4" fill="#111122" opacity="0.12"/>
+<rect x="163" y="208" width="36" height="22" rx="4" fill="#111122" opacity="0.12"/>
+<ellipse cx="160" cy="238" rx="14" ry="12" fill="#d49878"/>
+<circle cx="153" cy="242" r="5" fill="#c48868"/>
+<circle cx="167" cy="242" r="5" fill="#c48868"/>
+<g class="grandpa-head">
+<path d="M138 260 Q148 255 160 257 Q172 255 182 260" stroke="#9a6040" stroke-width="3" fill="none" stroke-linecap="round"/>
+</g>
+<path d="M150 270 Q160 275 170 270" stroke="#c09070" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+<ellipse cx="160" cy="155" rx="58" ry="32" fill="#E8E8E8"/>
+<ellipse cx="108" cy="175" rx="22" ry="30" fill="#E0E0E0"/>
+<ellipse cx="212" cy="175" rx="22" ry="30" fill="#E0E0E0"/>
+<path d="M120 155 Q130 130 145 140 Q155 125 175 140 Q190 130 200 155" fill="#EBEBEB"/>
+<path d="M138 143 Q155 133 175 143" stroke="white" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.6"/>
+<ellipse cx="106" cy="220" rx="10" ry="14" fill="#d4946a"/>
+<ellipse cx="107" cy="220" rx="6" ry="9" fill="#c48060"/>
+<ellipse cx="214" cy="220" rx="10" ry="14" fill="#d4946a"/>
+<ellipse cx="213" cy="220" rx="6" ry="9" fill="#c48060"/>
+</svg>"""
 
     # ==================================================================
-    # GRANDMA SVG CHARACTER — Dark CyberSentinel style
+    # GRANDMA SVG CHARACTER
     # ==================================================================
-    GRANDMA_SVG = """
-    <svg viewBox="0 0 300 440" xmlns="http://www.w3.org/2000/svg" width="240" style="filter: drop-shadow(0 20px 50px rgba(0,0,0,0.8));">
-      <defs>
-        <radialGradient id="gmSpot" cx="50%" cy="40%" r="50%">
-          <stop offset="0%" stop-color="#E8E8E8" stop-opacity="0.06"/>
-          <stop offset="100%" stop-color="#000" stop-opacity="0"/>
-        </radialGradient>
-        <radialGradient id="gmSkin" cx="40%" cy="30%" r="60%">
-          <stop offset="0%" stop-color="#f8d0b0"/>
-          <stop offset="100%" stop-color="#e0a888"/>
-        </radialGradient>
-        <radialGradient id="gmCheek" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stop-color="#f09090" stop-opacity="0.55"/>
-          <stop offset="100%" stop-color="#f09090" stop-opacity="0"/>
-        </radialGradient>
-      </defs>
-      <ellipse cx="150" cy="200" rx="130" ry="180" fill="url(#gmSpot)"/>
-
-      <!-- BODY — dark elegant outfit -->
-      <ellipse cx="150" cy="380" rx="80" ry="65" fill="#181818"/>
-      <rect x="78" y="315" width="144" height="90" rx="20" fill="#1E1E1E"/>
-      <!-- Pearl necklace -->
-      <path d="M118 308 Q150 318 182 308" stroke="none" fill="none"/>
-      <circle cx="122" cy="310" r="4" fill="#E8E6E0"/>
-      <circle cx="132" cy="313" r="4.5" fill="#F0EEEA"/>
-      <circle cx="142" cy="315" r="4.5" fill="#E8E6E0"/>
-      <circle cx="152" cy="316" r="5" fill="#F0EEEA"/>
-      <circle cx="162" cy="315" r="4.5" fill="#E8E6E0"/>
-      <circle cx="172" cy="313" r="4.5" fill="#F0EEEA"/>
-      <circle cx="181" cy="310" r="4" fill="#E8E6E0"/>
-      <!-- Elegant dark blouse details -->
-      <path d="M140 316 Q150 322 160 316 L157 335 Q150 330 143 335 Z" fill="#EBEBEB" opacity="0.9"/>
-      <!-- Yellow brooch / pin -->
-      <circle cx="150" cy="326" r="7" fill="#FFD21F"/>
-      <circle cx="150" cy="326" r="4" fill="#0A0A0A"/>
-      <circle cx="150" cy="326" r="2" fill="#FFD21F"/>
-
-      <!-- Arm holding phone — left arm -->
-      <rect x="60" y="315" width="30" height="55" rx="15" fill="#1E1E1E" transform="rotate(20 75 342)"/>
-      <!-- Phone being held -->
-      <rect x="42" y="340" width="40" height="65" rx="8" fill="#1a1a1a"/>
-      <rect x="45" y="344" width="34" height="56" rx="5" fill="#0f0f1a"/>
-      <!-- Small screen glow on phone -->
-      <rect x="47" y="347" width="30" height="28" rx="3" fill="#1a3a5c"/>
-      <rect x="49" y="350" width="26" height="4" rx="2" fill="#4080c0" opacity="0.7"/>
-      <rect x="49" y="357" width="20" height="3" rx="2" fill="#2060a0" opacity="0.5"/>
-      <!-- Right arm -->
-      <rect x="210" y="315" width="30" height="50" rx="14" fill="#1E1E1E" transform="rotate(-15 225 340)"/>
-      <!-- Right hand gesture (gentle wave) -->
-      <ellipse cx="232" cy="358" rx="15" ry="13" fill="#f0c09a"/>
-      <rect x="225" y="338" width="10" height="26" rx="5" fill="#f0c09a" transform="rotate(-10 230 351)"/>
-      <rect x="235" y="335" width="9" height="26" rx="5" fill="#f0c09a" transform="rotate(5 239 348)"/>
-
-      <!-- NECK -->
-      <rect x="138" y="283" width="24" height="38" rx="11" fill="#e8b890"/>
-
-      <!-- HEAD — round cute shape -->
-      <ellipse cx="150" cy="210" rx="68" ry="78" fill="url(#gmSkin)"/>
-      <!-- Extra round cheeks -->
-      <ellipse cx="100" cy="230" rx="22" ry="20" fill="#f0b090" opacity="0.4"/>
-      <ellipse cx="200" cy="230" rx="22" ry="20" fill="#f0b090" opacity="0.4"/>
-      <!-- Cheek blush -->
-      <ellipse cx="104" cy="233" rx="14" ry="9" fill="url(#gmCheek)"/>
-      <ellipse cx="196" cy="233" rx="14" ry="9" fill="url(#gmCheek)"/>
-
-      <!-- FRIENDLY RAISED BROWS -->
-      <path d="M106 188 Q120 180 135 186" stroke="#6a4030" stroke-width="4" fill="none" stroke-linecap="round"/>
-      <path d="M165 186 Q180 180 194 188" stroke="#6a4030" stroke-width="4" fill="none" stroke-linecap="round"/>
-
-      <!-- BIG ROUND EYES — wide awake, friendly -->
-      <!-- Left eye area -->
-      <ellipse cx="125" cy="215" rx="20" ry="19" fill="white"/>
-      <ellipse cx="126" cy="216" rx="12" ry="12" fill="#4a90c8"/>
-      <circle cx="127" cy="215" r="8" fill="#1a2a3a"/>
-      <circle cx="130" cy="212" r="2.5" fill="white"/>
-      <circle cx="124" cy="219" r="1.5" fill="white" opacity="0.6"/>
-      <!-- Right eye area -->
-      <ellipse cx="175" cy="215" rx="20" ry="19" fill="white"/>
-      <ellipse cx="176" cy="216" rx="12" ry="12" fill="#4a90c8"/>
-      <circle cx="177" cy="215" r="8" fill="#1a2a3a"/>
-      <circle cx="180" cy="212" r="2.5" fill="white"/>
-      <circle cx="174" cy="219" r="1.5" fill="white" opacity="0.6"/>
-      <!-- Eyelashes top -->
-      <path d="M106 208 Q115 200 124 207" stroke="#3a2520" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-      <path d="M157 207 Q165 200 174 208" stroke="#3a2520" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-
-      <!-- BIG ROUND GLASSES — gold/yellow frames -->
-      <circle cx="125" cy="215" r="24" fill="none" stroke="#C8A020" stroke-width="5"/>
-      <circle cx="175" cy="215" r="24" fill="none" stroke="#C8A020" stroke-width="5"/>
-      <!-- Bridge -->
-      <line x1="149" y1="215" x2="151" y2="215" stroke="#C8A020" stroke-width="5"/>
-      <!-- Temple arms -->
-      <line x1="102" y1="210" x2="87" y2="217" stroke="#C8A020" stroke-width="4" stroke-linecap="round"/>
-      <line x1="198" y1="210" x2="213" y2="217" stroke="#C8A020" stroke-width="4" stroke-linecap="round"/>
-      <!-- Lens subtle tint -->
-      <circle cx="125" cy="215" r="20" fill="#ffd21f" opacity="0.04"/>
-      <circle cx="175" cy="215" r="20" fill="#ffd21f" opacity="0.04"/>
-
-      <!-- SMALL NOSE -->
-      <ellipse cx="150" cy="240" rx="8" ry="6" fill="#dda88a"/>
-      <!-- Cute small nostrils -->
-      <circle cx="146" cy="242" r="3" fill="#cc9878"/>
-      <circle cx="154" cy="242" r="3" fill="#cc9878"/>
-
-      <!-- WARM SMILE -->
-      <path d="M126 258 Q150 276 174 258" stroke="#c07060" stroke-width="3" fill="none" stroke-linecap="round"/>
-      <path d="M130 260 Q150 273 170 260" stroke="#e09080" stroke-width="1.5" fill="#f0a890" opacity="0.4"/>
-      <!-- Small smile dimples -->
-      <circle cx="124" cy="258" r="3" fill="#e09888"/>
-      <circle cx="176" cy="258" r="3" fill="#e09888"/>
-
-      <!-- ELEGANT GREY HAIR in updo -->
-      <!-- Main bun on top -->
-      <ellipse cx="150" cy="148" rx="40" ry="34" fill="#C8C8C8"/>
-      <ellipse cx="150" cy="145" rx="30" ry="26" fill="#D8D8D8"/>
-      <!-- Bun highlight -->
-      <ellipse cx="143" cy="139" rx="12" ry="8" fill="white" opacity="0.3"/>
-      <!-- Side hair swept back -->
-      <path d="M83 215 Q88 165 115 155 Q100 200 102 230 Z" fill="#C0C0C0"/>
-      <path d="M217 215 Q212 165 185 155 Q200 200 198 230 Z" fill="#C0C0C0"/>
-      <!-- Hair wavy detail -->
-      <path d="M95 195 Q105 188 115 195" stroke="#B0B0B0" stroke-width="2" fill="none" stroke-linecap="round"/>
-      <path d="M185 195 Q195 188 205 195" stroke="#B0B0B0" stroke-width="2" fill="none" stroke-linecap="round"/>
-
-      <!-- Gold hair tiara accent with yellow gem (CyberSentinel yellow) -->
-      <path d="M120 153 Q150 138 180 153" stroke="#C8A020" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-      <circle cx="150" cy="140" r="6" fill="#FFD21F"/>
-      <circle cx="135" cy="146" r="4" fill="#C8A020"/>
-      <circle cx="165" cy="146" r="4" fill="#C8A020"/>
-
-      <!-- EARRINGS — small gold hoops -->
-      <ellipse cx="83" cy="226" rx="7" ry="9" fill="none" stroke="#C8A020" stroke-width="3"/>
-      <ellipse cx="217" cy="226" rx="7" ry="9" fill="none" stroke="#C8A020" stroke-width="3"/>
-
-      <!-- Ears -->
-      <ellipse cx="83" cy="220" rx="10" ry="14" fill="#e8b080"/>
-      <ellipse cx="217" cy="220" rx="10" ry="14" fill="#e8b080"/>
-    </svg>
-    """
+    GRANDMA_SVG = """<svg viewBox="0 0 300 440" xmlns="http://www.w3.org/2000/svg" width="220" style="filter: drop-shadow(0 20px 50px rgba(0,0,0,0.8));">
+<defs>
+<radialGradient id="gmSpot" cx="50%" cy="40%" r="50%"><stop offset="0%" stop-color="#E8E8E8" stop-opacity="0.06"/><stop offset="100%" stop-color="#000" stop-opacity="0"/></radialGradient>
+<radialGradient id="gmSkin" cx="40%" cy="30%" r="60%"><stop offset="0%" stop-color="#f8d0b0"/><stop offset="100%" stop-color="#e0a888"/></radialGradient>
+<radialGradient id="gmCheek" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#f09090" stop-opacity="0.55"/><stop offset="100%" stop-color="#f09090" stop-opacity="0"/></radialGradient>
+</defs>
+<ellipse cx="150" cy="200" rx="130" ry="180" fill="url(#gmSpot)"/>
+<ellipse cx="150" cy="380" rx="80" ry="65" fill="#181818"/>
+<rect x="78" y="315" width="144" height="90" rx="20" fill="#1E1E1E"/>
+<circle cx="122" cy="310" r="4" fill="#E8E6E0"/>
+<circle cx="132" cy="313" r="4.5" fill="#F0EEEA"/>
+<circle cx="142" cy="315" r="4.5" fill="#E8E6E0"/>
+<circle cx="152" cy="316" r="5" fill="#F0EEEA"/>
+<circle cx="162" cy="315" r="4.5" fill="#E8E6E0"/>
+<circle cx="172" cy="313" r="4.5" fill="#F0EEEA"/>
+<circle cx="181" cy="310" r="4" fill="#E8E6E0"/>
+<path d="M140 316 Q150 322 160 316 L157 335 Q150 330 143 335 Z" fill="#EBEBEB" opacity="0.9"/>
+<circle cx="150" cy="326" r="7" fill="#FFD21F"/>
+<circle cx="150" cy="326" r="4" fill="#0A0A0A"/>
+<circle cx="150" cy="326" r="2" fill="#FFD21F"/>
+<rect x="60" y="315" width="30" height="55" rx="15" fill="#1E1E1E" transform="rotate(20 75 342)"/>
+<rect x="42" y="340" width="40" height="65" rx="8" fill="#1a1a1a"/>
+<rect x="45" y="344" width="34" height="56" rx="5" fill="#0f0f1a"/>
+<rect x="47" y="347" width="30" height="28" rx="3" fill="#1a3a5c"/>
+<rect x="49" y="350" width="26" height="4" rx="2" fill="#4080c0" opacity="0.7"/>
+<rect x="49" y="357" width="20" height="3" rx="2" fill="#2060a0" opacity="0.5"/>
+<rect x="210" y="315" width="30" height="50" rx="14" fill="#1E1E1E" transform="rotate(-15 225 340)"/>
+<g class="grandma-wave">
+<ellipse cx="232" cy="358" rx="15" ry="13" fill="#f0c09a"/>
+<rect x="225" y="338" width="10" height="26" rx="5" fill="#f0c09a" transform="rotate(-10 230 351)"/>
+<rect x="235" y="335" width="9" height="26" rx="5" fill="#f0c09a" transform="rotate(5 239 348)"/>
+</g>
+<rect x="138" y="283" width="24" height="38" rx="11" fill="#e8b890"/>
+<ellipse cx="150" cy="210" rx="68" ry="78" fill="url(#gmSkin)"/>
+<ellipse cx="100" cy="230" rx="22" ry="20" fill="#f0b090" opacity="0.4"/>
+<ellipse cx="200" cy="230" rx="22" ry="20" fill="#f0b090" opacity="0.4"/>
+<ellipse cx="104" cy="233" rx="14" ry="9" fill="url(#gmCheek)"/>
+<ellipse cx="196" cy="233" rx="14" ry="9" fill="url(#gmCheek)"/>
+<path d="M106 188 Q120 180 135 186" stroke="#6a4030" stroke-width="4" fill="none" stroke-linecap="round"/>
+<path d="M165 186 Q180 180 194 188" stroke="#6a4030" stroke-width="4" fill="none" stroke-linecap="round"/>
+<ellipse cx="125" cy="215" rx="20" ry="19" fill="white"/>
+<ellipse cx="126" cy="216" rx="12" ry="12" fill="#4a90c8"/>
+<circle cx="127" cy="215" r="8" fill="#1a2a3a"/>
+<circle cx="130" cy="212" r="2.5" fill="white"/>
+<circle cx="124" cy="219" r="1.5" fill="white" opacity="0.6"/>
+<ellipse cx="175" cy="215" rx="20" ry="19" fill="white"/>
+<ellipse cx="176" cy="216" rx="12" ry="12" fill="#4a90c8"/>
+<circle cx="177" cy="215" r="8" fill="#1a2a3a"/>
+<circle cx="180" cy="212" r="2.5" fill="white"/>
+<circle cx="174" cy="219" r="1.5" fill="white" opacity="0.6"/>
+<path d="M106 208 Q115 200 124 207" stroke="#3a2520" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+<path d="M157 207 Q165 200 174 208" stroke="#3a2520" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+<circle cx="125" cy="215" r="24" fill="none" stroke="#C8A020" stroke-width="5"/>
+<circle cx="175" cy="215" r="24" fill="none" stroke="#C8A020" stroke-width="5"/>
+<line x1="149" y1="215" x2="151" y2="215" stroke="#C8A020" stroke-width="5"/>
+<line x1="102" y1="210" x2="87" y2="217" stroke="#C8A020" stroke-width="4" stroke-linecap="round"/>
+<line x1="198" y1="210" x2="213" y2="217" stroke="#C8A020" stroke-width="4" stroke-linecap="round"/>
+<circle cx="125" cy="215" r="20" fill="#ffd21f" opacity="0.04"/>
+<circle cx="175" cy="215" r="20" fill="#ffd21f" opacity="0.04"/>
+<ellipse cx="150" cy="240" rx="8" ry="6" fill="#dda88a"/>
+<circle cx="146" cy="242" r="3" fill="#cc9878"/>
+<circle cx="154" cy="242" r="3" fill="#cc9878"/>
+<path d="M126 258 Q150 276 174 258" stroke="#c07060" stroke-width="3" fill="none" stroke-linecap="round"/>
+<path d="M130 260 Q150 273 170 260" stroke="#e09080" stroke-width="1.5" fill="#f0a890" opacity="0.4"/>
+<circle cx="124" cy="258" r="3" fill="#e09888"/>
+<circle cx="176" cy="258" r="3" fill="#e09888"/>
+<ellipse cx="150" cy="148" rx="40" ry="34" fill="#C8C8C8"/>
+<ellipse cx="150" cy="145" rx="30" ry="26" fill="#D8D8D8"/>
+<ellipse cx="143" cy="139" rx="12" ry="8" fill="white" opacity="0.3"/>
+<path d="M83 215 Q88 165 115 155 Q100 200 102 230 Z" fill="#C0C0C0"/>
+<path d="M217 215 Q212 165 185 155 Q200 200 198 230 Z" fill="#C0C0C0"/>
+<path d="M95 195 Q105 188 115 195" stroke="#B0B0B0" stroke-width="2" fill="none" stroke-linecap="round"/>
+<path d="M185 195 Q195 188 205 195" stroke="#B0B0B0" stroke-width="2" fill="none" stroke-linecap="round"/>
+<path d="M120 153 Q150 138 180 153" stroke="#C8A020" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+<circle cx="150" cy="140" r="6" fill="#FFD21F"/>
+<circle cx="135" cy="146" r="4" fill="#C8A020"/>
+<circle cx="165" cy="146" r="4" fill="#C8A020"/>
+<ellipse cx="83" cy="226" rx="7" ry="9" fill="none" stroke="#C8A020" stroke-width="3"/>
+<ellipse cx="217" cy="226" rx="7" ry="9" fill="none" stroke="#C8A020" stroke-width="3"/>
+<ellipse cx="83" cy="220" rx="10" ry="14" fill="#e8b080"/>
+<ellipse cx="217" cy="220" rx="10" ry="14" fill="#e8b080"/>
+</svg>"""
 
     # ==================================================================
-    # WARNING SIGN SVG (Grandpa's prop)
+    # WARNING SIGN SVG
     # ==================================================================
-    WARNING_SVG = """
-    <svg viewBox="0 0 100 90" xmlns="http://www.w3.org/2000/svg" width="90" style="filter: drop-shadow(0 4px 20px rgba(255,210,31,0.3));">
-      <polygon points="50,5 95,82 5,82" fill="#FFD21F" stroke="#0A0A0A" stroke-width="2"/>
-      <polygon points="50,15 87,78 13,78" fill="#FFD21F"/>
-      <text x="50" y="65" text-anchor="middle" font-size="38" font-weight="900" fill="#0A0A0A" font-family="sans-serif">!</text>
-      <rect x="44" y="30" width="12" height="24" rx="4" fill="#0A0A0A"/>
-      <circle cx="50" cy="63" r="6" fill="#0A0A0A"/>
-    </svg>
-    """
+    WARNING_SVG = """<svg viewBox="0 0 100 90" xmlns="http://www.w3.org/2000/svg" width="70" class="warning-triangle">
+<polygon points="50,5 95,82 5,82" fill="#FFD21F" stroke="#0A0A0A" stroke-width="2"/>
+<polygon points="50,15 87,78 13,78" fill="#FFD21F"/>
+<rect x="44" y="30" width="12" height="24" rx="4" fill="#0A0A0A"/>
+<circle cx="50" cy="63" r="6" fill="#0A0A0A"/>
+</svg>"""
 
     # ==================================================================
-    # HERO SECTION — 2-column desktop layout
+    # BUILD THE FULL INTERACTIVE PAGE AS ONE HTML DOCUMENT
     # ==================================================================
-    render_html(f"""
-    <div class="st-hero-split">
-      <div class="st-hero-left">
-        <div style="font-size:0.88rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#A6A6A6;margin-bottom:0.75rem;">SCAM AWARENESS</div>
-        <h1 style="font-size: clamp(2.4rem, 5vw, 3.8rem); line-height: 1.1; font-weight: 900; color: #F5F5F5; margin: 0 0 1rem 0;">SAFETY<br/>STARTS WITH<br/>A <span style="color:#FFD21F;">SECOND LOOK.</span></h1>
-        <p style="font-size:1.1rem;color:#A6A6A6;line-height:1.6;max-width:440px;">Scammers only need one click. Learn how to spot the warning signs before you open an unknown link.</p>
-      </div>
-      <div class="st-hero-right" style="position:relative; min-height: 320px; display:flex; justify-content:center; align-items:flex-end;">
-        <div class="speech-bubble-grandpa">WAIT A MINUTE...</div>
-        {GRANDPA_SVG}
-        <div style="position:absolute;bottom:8px;right:20px;">{WARNING_SVG}</div>
-      </div>
+    safety_tips_html = f"""
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
+
+* {{ margin: 0; padding: 0; box-sizing: border-box; }}
+
+body {{
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #0A0A0A;
+  color: #F5F5F5;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}}
+
+/* ===== HERO SECTION ===== */
+.hero {{
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 3rem;
+  align-items: center;
+  padding: 2.5rem 2rem 2rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}}
+.hero-left {{}}
+.hero-eyebrow {{
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #888;
+  margin-bottom: 0.75rem;
+}}
+.hero-title {{
+  font-size: clamp(2.2rem, 4.5vw, 3.4rem);
+  font-weight: 900;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  color: #F5F5F5;
+  margin-bottom: 1rem;
+}}
+.hero-title span {{ color: #FFD21F; }}
+.hero-subtitle {{
+  font-size: 1.05rem;
+  color: #999;
+  line-height: 1.6;
+  max-width: 420px;
+}}
+.hero-right {{
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  min-height: 340px;
+}}
+
+/* ===== GRANDPA ANIMATIONS ===== */
+.grandpa-container {{
+  position: relative;
+  animation: grandpaEntrance 0.8s ease-out;
+}}
+@keyframes grandpaEntrance {{
+  0% {{ opacity: 0; transform: translateY(20px); }}
+  100% {{ opacity: 1; transform: translateY(0); }}
+}}
+.grandpa-container svg {{
+  animation: grandpaIdle 4s ease-in-out infinite;
+}}
+@keyframes grandpaIdle {{
+  0%, 100% {{ transform: translateY(0); }}
+  50% {{ transform: translateY(-3px); }}
+}}
+.grandpa-hand {{
+  animation: handWarn 3s ease-in-out infinite;
+  transform-origin: 222px 322px;
+}}
+@keyframes handWarn {{
+  0%, 70%, 100% {{ transform: rotate(0deg); }}
+  75% {{ transform: rotate(-3deg); }}
+  80% {{ transform: rotate(3deg); }}
+  85% {{ transform: rotate(-2deg); }}
+  90% {{ transform: rotate(0deg); }}
+}}
+.grandpa-head {{
+  animation: headShake 6s ease-in-out infinite;
+  transform-origin: 160px 257px;
+}}
+@keyframes headShake {{
+  0%, 80%, 100% {{ transform: rotate(0deg); }}
+  83% {{ transform: rotate(-1.5deg); }}
+  86% {{ transform: rotate(1.5deg); }}
+  89% {{ transform: rotate(-1deg); }}
+  92% {{ transform: rotate(0deg); }}
+}}
+
+/* Warning triangle pulse */
+.warning-triangle {{
+  animation: warnPulse 2.5s ease-in-out infinite;
+  filter: drop-shadow(0 4px 20px rgba(255,210,31,0.3));
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}}
+@keyframes warnPulse {{
+  0%, 100% {{ filter: drop-shadow(0 4px 15px rgba(255,210,31,0.2)); }}
+  50% {{ filter: drop-shadow(0 4px 28px rgba(255,210,31,0.5)); }}
+}}
+.warning-pos {{
+  position: absolute;
+  bottom: 12px;
+  right: 8px;
+}}
+.warning-pos:hover .warning-triangle {{
+  animation: warnShake 0.4s ease-in-out;
+}}
+@keyframes warnShake {{
+  0%, 100% {{ transform: rotate(0); }}
+  25% {{ transform: rotate(-5deg); }}
+  75% {{ transform: rotate(5deg); }}
+}}
+.warning-tooltip {{
+  display: none;
+  position: absolute;
+  bottom: 100%;
+  right: 0;
+  background: #1A1A1A;
+  border: 1.5px solid #FFD21F;
+  border-radius: 10px;
+  padding: 0.6rem 0.9rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #FFD21F;
+  white-space: nowrap;
+  margin-bottom: 6px;
+  z-index: 20;
+}}
+.warning-pos:hover .warning-tooltip {{
+  display: block;
+  animation: fadeIn 0.2s ease;
+}}
+
+/* Grandpa speech bubble — rotating messages */
+.gp-bubble {{
+  position: absolute;
+  top: 6px;
+  right: 0;
+  background: #141414;
+  border: 2px solid #FFD21F;
+  border-radius: 14px 14px 4px 14px;
+  padding: 0.55rem 1rem;
+  z-index: 10;
+  min-width: 180px;
+  text-align: center;
+}}
+.gp-bubble::after {{
+  content: '';
+  position: absolute;
+  bottom: -9px;
+  right: 18px;
+  border: 5px solid transparent;
+  border-top-color: #FFD21F;
+}}
+.gp-bubble-text {{
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #FFD21F;
+  letter-spacing: 0.02em;
+  transition: opacity 0.4s ease;
+}}
+
+/* ===== DIVIDER ===== */
+.divider {{
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #292929, transparent);
+  margin: 2rem auto;
+  max-width: 1200px;
+}}
+
+/* ===== GRANDPA WARNING SECTION ===== */
+.warning-section {{
+  display: grid;
+  grid-template-columns: 0.75fr 1.25fr;
+  gap: 3rem;
+  align-items: center;
+  padding: 2rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}}
+.warning-char {{ text-align: center; }}
+.warning-char-bubble {{
+  margin-top: 0.8rem;
+  background: #141414;
+  border: 1.5px solid #FFD21F;
+  border-radius: 12px 12px 4px 12px;
+  padding: 0.6rem 0.9rem;
+  text-align: center;
+  max-width: 210px;
+  margin-left: auto;
+  margin-right: auto;
+}}
+.warning-char-bubble span {{
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #FFD21F;
+  font-style: italic;
+}}
+.warning-content h2 {{
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  color: #F5F5F5;
+  margin-bottom: 0.3rem;
+}}
+.warning-content .quote {{
+  font-size: clamp(1.2rem, 2.2vw, 1.6rem);
+  font-weight: 800;
+  color: #FFD21F;
+  font-style: italic;
+  margin-bottom: 1.25rem;
+}}
+.warning-content > p {{
+  font-size: 1rem;
+  color: #999;
+  line-height: 1.6;
+  margin-bottom: 1.25rem;
+}}
+.warn-card {{
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  background: #131313;
+  border: 1px solid rgba(255,210,31,0.15);
+  border-radius: 12px;
+  padding: 1rem 1.15rem;
+  margin-bottom: 0.75rem;
+  transition: border-color 0.25s ease, transform 0.2s ease;
+}}
+.warn-card:hover {{
+  border-color: rgba(255,210,31,0.35);
+  transform: translateY(-1px);
+}}
+.warn-card .icon {{ font-size: 1.4rem; flex-shrink: 0; padding-top: 2px; }}
+.warn-card .text {{ font-size: 0.92rem; color: #ccc; line-height: 1.5; }}
+.warn-card .text strong {{ color: #FFD21F; }}
+
+/* ===== GRANDMA LESSON SECTION ===== */
+.lesson-section {{
+  display: grid;
+  grid-template-columns: 1.3fr 0.7fr;
+  gap: 3rem;
+  align-items: start;
+  padding: 2rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}}
+.lesson-left h2 {{
+  font-size: clamp(1.5rem, 3vw, 2.1rem);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  color: #F5F5F5;
+  margin-bottom: 0.3rem;
+}}
+.lesson-intro {{
+  font-size: 1rem;
+  color: #999;
+  font-style: italic;
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+}}
+
+/* Progress dots */
+.progress-bar {{
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}}
+.progress-dot {{
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #2A2A2A;
+  border: 1.5px solid #444;
+  transition: all 0.35s ease;
+}}
+.progress-dot.active {{
+  background: #FFD21F;
+  border-color: #FFD21F;
+  box-shadow: 0 0 8px rgba(255,210,31,0.4);
+}}
+.progress-dot.done {{
+  background: #555;
+  border-color: #666;
+}}
+.progress-counter {{
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #666;
+  letter-spacing: 0.08em;
+  margin-left: 0.5rem;
+}}
+
+/* Tip card — single active tip */
+.tip-display {{
+  position: relative;
+  min-height: 180px;
+}}
+.tip-card {{
+  background: #111;
+  border: 1px solid #252525;
+  border-radius: 16px;
+  padding: 1.75rem 2rem;
+  animation: tipEnter 0.45s ease-out;
+  transition: border-color 0.25s ease;
+}}
+.tip-card:hover {{
+  border-color: rgba(255,210,31,0.3);
+}}
+@keyframes tipEnter {{
+  0% {{ opacity: 0; transform: translateX(30px); }}
+  100% {{ opacity: 1; transform: translateX(0); }}
+}}
+.tip-number {{
+  font-size: 0.75rem;
+  font-weight: 900;
+  color: #FFD21F;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}}
+.tip-title {{
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #F5F5F5;
+  margin-bottom: 0.65rem;
+  letter-spacing: -0.01em;
+}}
+.tip-desc {{
+  font-size: 0.95rem;
+  color: #999;
+  line-height: 1.65;
+}}
+
+/* Nav buttons */
+.tip-nav {{
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}}
+.tip-btn {{
+  background: #151515;
+  border: 1.5px solid #333;
+  border-radius: 10px;
+  padding: 0.6rem 1.3rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #ccc;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}}
+.tip-btn:hover {{
+  border-color: #FFD21F;
+  color: #FFD21F;
+  transform: translateY(-1px);
+}}
+.tip-btn:hover .arrow {{
+  transform: translateX(3px);
+}}
+.tip-btn .arrow {{
+  transition: transform 0.2s ease;
+  font-size: 0.9rem;
+}}
+.tip-btn.primary {{
+  background: #FFD21F;
+  border-color: #FFD21F;
+  color: #0A0A0A;
+}}
+.tip-btn.primary:hover {{
+  background: #ffe34d;
+  color: #0A0A0A;
+  transform: translateY(-1px);
+}}
+
+/* Completion state */
+.tip-complete {{
+  text-align: center;
+  padding: 2rem;
+  animation: tipEnter 0.5s ease-out;
+}}
+.tip-complete .emoji {{ font-size: 2rem; margin-bottom: 0.75rem; }}
+.tip-complete h3 {{
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #FFD21F;
+  margin-bottom: 0.4rem;
+}}
+.tip-complete p {{ font-size: 0.95rem; color: #999; }}
+
+/* ===== GRANDMA CHARACTER COLUMN ===== */
+.grandma-col {{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 1rem;
+}}
+.gm-bubble {{
+  background: #141414;
+  border: 1.5px solid #555;
+  border-radius: 14px 14px 14px 4px;
+  padding: 0.6rem 1rem;
+  text-align: center;
+  max-width: 220px;
+  margin-bottom: 1rem;
+  transition: opacity 0.4s ease;
+}}
+.gm-bubble-text {{
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #ddd;
+  font-style: italic;
+  line-height: 1.45;
+}}
+.grandma-container {{
+  animation: grandmaEntrance 0.8s ease-out 0.2s both;
+}}
+@keyframes grandmaEntrance {{
+  0% {{ opacity: 0; transform: translateY(20px); }}
+  100% {{ opacity: 1; transform: translateY(0); }}
+}}
+.grandma-container svg {{
+  transition: transform 0.4s ease;
+}}
+.grandma-react {{
+  animation: grandmaReact 0.6s ease-out;
+}}
+@keyframes grandmaReact {{
+  0% {{ transform: scale(1); }}
+  30% {{ transform: scale(1.02) rotate(-1deg); }}
+  60% {{ transform: scale(1) rotate(0.5deg); }}
+  100% {{ transform: scale(1) rotate(0); }}
+}}
+.grandma-wave {{
+  animation: waveGesture 3.5s ease-in-out infinite;
+  transform-origin: 232px 358px;
+}}
+@keyframes waveGesture {{
+  0%, 70%, 100% {{ transform: rotate(0deg); }}
+  75% {{ transform: rotate(-4deg); }}
+  80% {{ transform: rotate(4deg); }}
+  85% {{ transform: rotate(-2deg); }}
+  90% {{ transform: rotate(0deg); }}
+}}
+.grandma-nod {{
+  animation: grandmaNod 0.5s ease-in-out;
+}}
+@keyframes grandmaNod {{
+  0%, 100% {{ transform: translateY(0); }}
+  40% {{ transform: translateY(4px); }}
+  70% {{ transform: translateY(-2px); }}
+}}
+
+/* ===== FINAL CTA ===== */
+.final-cta {{
+  text-align: center;
+  padding: 3rem 2rem 2rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}}
+.final-callout {{
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  background: #131313;
+  border: 1.5px solid rgba(255,210,31,0.2);
+  border-radius: 50px;
+  padding: 0.55rem 1.4rem;
+  margin-bottom: 1.5rem;
+}}
+.final-callout .label {{
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #FFD21F;
+}}
+.final-callout .text {{
+  font-size: 0.92rem;
+  color: #ccc;
+  font-weight: 600;
+  font-style: italic;
+}}
+.final-cta h2 {{
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  color: #F5F5F5;
+  margin-bottom: 0.4rem;
+}}
+.final-cta h2 span {{ color: #FFD21F; }}
+.final-cta > p {{
+  font-size: 1rem;
+  color: #999;
+  margin-bottom: 0;
+}}
+.footer {{
+  text-align: center;
+  padding: 2.5rem 1rem 1.5rem;
+  font-size: 0.78rem;
+  color: #555;
+  letter-spacing: 0.03em;
+}}
+
+/* ===== GENERIC UTILITIES ===== */
+@keyframes fadeIn {{
+  0% {{ opacity: 0; }}
+  100% {{ opacity: 1; }}
+}}
+@media (max-width: 800px) {{
+  .hero, .warning-section, .lesson-section {{
+    grid-template-columns: 1fr !important;
+  }}
+  .hero-right, .warning-char, .grandma-col {{
+    order: -1;
+  }}
+}}
+</style>
+</head>
+<body>
+
+<!-- ==================== HERO SECTION ==================== -->
+<div class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">SCAM AWARENESS</div>
+    <h1 class="hero-title">SAFETY<br>STARTS WITH<br>A <span>SECOND LOOK.</span></h1>
+    <p class="hero-subtitle">Scammers only need one click. Learn how to spot the warning signs before you open an unknown link.</p>
+  </div>
+  <div class="hero-right">
+    <div class="gp-bubble">
+      <div class="gp-bubble-text" id="gpBubbleText">WAIT A MINUTE...</div>
     </div>
-    """)
-
-    # ==================================================================
-    # DIVIDER
-    # ==================================================================
-    render_html('<div class="tip-section-divider"></div>')
-
-    # ==================================================================
-    # GRANDPA WARNING SECTION
-    # ==================================================================
-    render_html(f"""
-    <div class="grandpa-warning-section">
-      <div class="grandpa-char-col">
-        {GRANDPA_SVG}
-        <div style="margin-top:1rem; background:#1A1A1A; border:1.5px solid #FFD21F; border-radius:12px 12px 4px 12px; padding:0.7rem 1rem; text-align:center; max-width:220px;">
-          <span style="font-size:0.95rem;font-weight:800;color:#FFD21F;font-style:italic;">"That link looks suspicious to me."</span>
-        </div>
-      </div>
-      <div class="grandpa-warning-text">
-        <h2>GRANDPA SAYS:</h2>
-        <div class="grandpa-quote">"STOP. LOOK FIRST."</div>
-        <p style="margin-bottom:1.5rem;">Grandpa has seen every trick in the book. From fake bank alerts to prize-winning emails — he's not fooled. And neither should you be.</p>
-
-        <div class="warning-sign-visual">
-          <div class="warn-icon">⚠️</div>
-          <div class="warn-text"><strong style="color:#FFD21F;">You only need to get tricked once.</strong><br/>One wrong click can hand over your password, your money, or your identity.</div>
-        </div>
-        <div class="warning-sign-visual">
-          <div class="warn-icon">🔍</div>
-          <div class="warn-text"><strong style="color:#FFD21F;">The warning signs are always there.</strong><br/>Scammers leave footprints. You just need to know where to look.</div>
-        </div>
-        <div class="warning-sign-visual">
-          <div class="warn-icon">⏸️</div>
-          <div class="warn-text"><strong style="color:#FFD21F;">Pause before you click.</strong><br/>A second of hesitation can protect your entire digital life.</div>
-        </div>
-      </div>
+    <div class="grandpa-container">
+      {GRANDPA_SVG}
     </div>
-    """)
+    <div class="warning-pos">
+      <div class="warning-tooltip">Something looks suspicious? Stop and check first.</div>
+      {WARNING_SVG}
+    </div>
+  </div>
+</div>
 
-    # ==================================================================
-    # DIVIDER
-    # ==================================================================
-    render_html('<div class="tip-section-divider"></div>')
+<div class="divider"></div>
 
-    # ==================================================================
-    # GRANDMA TIPS SECTION
-    # ==================================================================
-    tips_html = ""
-    tips = [
-        ("01", "CHECK THE WEBSITE NAME",
-         "Scammers often use names that look almost like the real thing — like paypa1.com instead of paypal.com. Always read the address carefully."),
-        ("02", "DON'T TRUST URGENT MESSAGES",
-         "Messages telling you to \"act immediately\" or \"your account is suspended\" are designed to panic you into clicking without thinking."),
-        ("03", "BE CAREFUL WITH LOGIN LINKS",
-         "Before entering your password, make sure you are really on the website you intended to visit — not a fake copy."),
-        ("04", "DON'T SHARE SENSITIVE INFORMATION",
-         "Never enter your passwords, payment card details, or personal ID through an unfamiliar or unsolicited link."),
-        ("05", "WATCH FOR STRANGE WEB ADDRESSES",
-         "Long, confusing, or garbled web addresses deserve a closer look. Check the link before you open it."),
-        ("06", "WHEN IN DOUBT, DON'T CLICK",
-         "If something feels even slightly off, stop. Trust your instincts and verify through an official app or phone number."),
-    ]
-    for num, title, desc in tips:
-        tips_html += f"""
-        <div class="tip-card">
-          <div class="tip-num">{num}</div>
-          <div class="tip-body">
-            <h3>{title}</h3>
-            <p>{desc}</p>
-          </div>
-        </div>"""
+<!-- ==================== GRANDPA WARNING SECTION ==================== -->
+<div class="warning-section">
+  <div class="warning-char">
+    <div class="grandpa-container" style="transform:scale(0.85);">
+      {GRANDPA_SVG}
+    </div>
+    <div class="warning-char-bubble">
+      <span>"That link looks suspicious to me."</span>
+    </div>
+  </div>
+  <div class="warning-content">
+    <h2>GRANDPA SAYS:</h2>
+    <div class="quote">"STOP. LOOK FIRST."</div>
+    <p>Grandpa has seen every trick in the book. From fake bank alerts to prize-winning emails — he's not fooled. And neither should you be.</p>
+    <div class="warn-card">
+      <div class="icon">&#9888;&#65039;</div>
+      <div class="text"><strong>You only need to get tricked once.</strong><br>One wrong click can hand over your password, your money, or your identity.</div>
+    </div>
+    <div class="warn-card">
+      <div class="icon">&#128269;</div>
+      <div class="text"><strong>The warning signs are always there.</strong><br>Scammers leave footprints. You just need to know where to look.</div>
+    </div>
+    <div class="warn-card">
+      <div class="icon">&#9208;&#65039;</div>
+      <div class="text"><strong>Pause before you click.</strong><br>A second of hesitation can protect your entire digital life.</div>
+    </div>
+  </div>
+</div>
 
-    render_html(f"""
-    <div class="grandma-tips-section">
-      <div class="grandma-tips-col">
-        <h2>HERE'S WHAT GRANDMA RECOMMENDS.</h2>
-        <div class="grandma-quote">"Come on, dear. Let me show you how to stay safe online."</div>
-        {tips_html}
-      </div>
-      <div class="grandma-char-col">
-        <div style="background:#1A1A1A; border:1.5px solid #555; border-radius:14px 14px 4px 14px; padding:0.7rem 1rem; text-align:center; max-width:210px; margin-bottom:1.25rem;">
-          <span style="font-size:0.9rem;font-weight:700;color:#F5F5F5;font-style:italic;">"Let me show you what to look for."</span>
+<div class="divider"></div>
+
+<!-- ==================== GRANDMA LESSON SECTION ==================== -->
+<div class="lesson-section">
+  <div class="lesson-left">
+    <h2>GRANDMA'S SAFETY LESSON</h2>
+    <div class="lesson-intro" id="lessonIntro">"Come here, dear. Let me show you how to stay safe online."</div>
+
+    <div class="progress-bar" id="progressBar">
+      <div class="progress-dot active" data-idx="0"></div>
+      <div class="progress-dot" data-idx="1"></div>
+      <div class="progress-dot" data-idx="2"></div>
+      <div class="progress-dot" data-idx="3"></div>
+      <div class="progress-dot" data-idx="4"></div>
+      <div class="progress-dot" data-idx="5"></div>
+      <span class="progress-counter" id="progressCounter">01 / 06</span>
+    </div>
+
+    <div class="tip-display" id="tipDisplay">
+      <!-- Tips rendered dynamically by JS -->
+    </div>
+
+    <div class="tip-nav" id="tipNav">
+      <button class="tip-btn" id="prevBtn" style="display:none;">
+        <span class="arrow">&larr;</span> PREVIOUS
+      </button>
+      <button class="tip-btn primary" id="nextBtn">
+        NEXT TIP <span class="arrow">&rarr;</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="grandma-col">
+    <div class="gm-bubble" id="gmBubble">
+      <div class="gm-bubble-text" id="gmBubbleText">Look closely at that web address, dear.</div>
+    </div>
+    <div class="grandma-container" id="grandmaContainer">
+      {GRANDMA_SVG}
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ==================== FINAL CTA ==================== -->
+<div class="final-cta">
+  <div class="final-callout">
+    <span class="label">GRANDPA SAYS:</span>
+    <span class="text">"Still unsure? Check the link before you click."</span>
+  </div>
+  <h2>CHECK BEFORE<br>YOU <span>CLICK.</span></h2>
+  <p>CyberSentinel helps you decide in seconds. Paste any link and see what we find.</p>
+</div>
+
+<div class="footer">CyberSentinel &middot; Simple, private, instant link safety checks.</div>
+
+<!-- ==================== JAVASCRIPT ==================== -->
+<script>
+(function() {{
+  // ===== GRANDPA SPEECH BUBBLE ROTATION =====
+  const gpMessages = [
+    "WAIT A MINUTE...",
+    "CHECK THAT LINK FIRST.",
+    "DON'T RUSH INTO A CLICK.",
+    "LOOK BEFORE YOU LOG IN."
+  ];
+  let gpIdx = 0;
+  const gpBubble = document.getElementById('gpBubbleText');
+
+  setInterval(() => {{
+    gpBubble.style.opacity = '0';
+    setTimeout(() => {{
+      gpIdx = (gpIdx + 1) % gpMessages.length;
+      gpBubble.textContent = gpMessages[gpIdx];
+      gpBubble.style.opacity = '1';
+    }}, 400);
+  }}, 4000);
+
+  // ===== TIPS DATA =====
+  const tips = [
+    {{
+      num: "01",
+      title: "CHECK THE WEBSITE NAME",
+      desc: "Scammers often use names that look almost like the real thing \\u2014 like paypa1.com instead of paypal.com. Always read the address carefully.",
+      bubble: "Look closely at that web address, dear."
+    }},
+    {{
+      num: "02",
+      title: "DON\\u2019T TRUST URGENT MESSAGES",
+      desc: "Messages telling you to \\u201Cact immediately\\u201D or \\u201Cyour account is suspended\\u201D are designed to panic you into clicking without thinking.",
+      bubble: "Don\\u2019t let anyone rush you into clicking."
+    }},
+    {{
+      num: "03",
+      title: "BE CAREFUL WITH LOGIN LINKS",
+      desc: "Before entering your password, make sure you are really on the website you intended to visit \\u2014 not a fake copy.",
+      bubble: "Always check where you\\u2019re entering your password."
+    }},
+    {{
+      num: "04",
+      title: "DON\\u2019T SHARE SENSITIVE INFORMATION",
+      desc: "Never enter your passwords, payment card details, or personal ID through an unfamiliar or unsolicited link.",
+      bubble: "Your password belongs to you. Keep it private."
+    }},
+    {{
+      num: "05",
+      title: "WATCH FOR STRANGE WEB ADDRESSES",
+      desc: "Long, confusing, or garbled web addresses deserve a closer look. Check the link before you open it.",
+      bubble: "Strange-looking links deserve a second look."
+    }},
+    {{
+      num: "06",
+      title: "WHEN IN DOUBT, DON\\u2019T CLICK",
+      desc: "If something feels even slightly off, stop. Trust your instincts and verify through an official app or phone number.",
+      bubble: "If you\\u2019re unsure, simply don\\u2019t click."
+    }}
+  ];
+
+  let currentTip = 0;
+  const tipDisplay = document.getElementById('tipDisplay');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const progressCounter = document.getElementById('progressCounter');
+  const dots = document.querySelectorAll('.progress-dot');
+  const gmBubbleText = document.getElementById('gmBubbleText');
+  const grandmaContainer = document.getElementById('grandmaContainer');
+  const lessonIntro = document.getElementById('lessonIntro');
+
+  function padNum(n) {{ return String(n).padStart(2, '0'); }}
+
+  function renderTip(idx, completed) {{
+    if (completed) {{
+      tipDisplay.innerHTML = `
+        <div class="tip-complete">
+          <div class="emoji">\\u2728</div>
+          <h3>That's all, dear. Stay safe out there.</h3>
+          <p>Grandma is proud of you for learning these tips!</p>
         </div>
-        {GRANDMA_SVG}
+      `;
+      prevBtn.style.display = 'inline-flex';
+      nextBtn.style.display = 'none';
+      lessonIntro.textContent = '"You did so well, dear. Now you know what to look for."';
+      gmBubbleText.textContent = "I'm so proud of you, dear!";
+
+      // Grandma happy nod
+      grandmaContainer.classList.remove('grandma-nod');
+      void grandmaContainer.offsetWidth;
+      grandmaContainer.classList.add('grandma-nod');
+      return;
+    }}
+
+    const tip = tips[idx];
+    tipDisplay.innerHTML = `
+      <div class="tip-card" key="${{idx}}">
+        <div class="tip-number">${{tip.num}}</div>
+        <div class="tip-title">${{tip.title}}</div>
+        <div class="tip-desc">${{tip.desc}}</div>
       </div>
-    </div>
-    """)
+    `;
 
-    # ==================================================================
-    # FINAL CTA SECTION
-    # ==================================================================
-    render_html('<div class="tip-section-divider"></div>')
+    // Update progress
+    progressCounter.textContent = padNum(idx + 1) + ' / 06';
+    dots.forEach((dot, i) => {{
+      dot.className = 'progress-dot';
+      if (i < idx) dot.classList.add('done');
+      if (i === idx) dot.classList.add('active');
+    }});
 
-    render_html("""
-    <div class="final-cta-section">
-      <div class="grandpa-final-callout">
-        <span class="callout-label">GRANDPA SAYS:</span>
-        <span class="callout-text">"Still unsure? Check the link before you click."</span>
-      </div>
-      <h2>CHECK BEFORE<br/>YOU <span>CLICK.</span></h2>
-      <p>CyberSentinel helps you decide in seconds. Paste any link and see what we find.</p>
-    </div>
-    """)
+    // Update navigation
+    prevBtn.style.display = idx > 0 ? 'inline-flex' : 'none';
+    nextBtn.innerHTML = idx < tips.length - 1
+      ? 'NEXT TIP <span class="arrow">&rarr;</span>'
+      : 'FINISH <span class="arrow">&#10003;</span>';
+    nextBtn.style.display = 'inline-flex';
 
-    if st.button("CHECK A LINK NOW →", type="primary", key="tips_cta_btn"):
-        navigate_to("home")
-        st.rerun()
+    // Update grandma speech bubble
+    gmBubbleText.style.opacity = '0';
+    setTimeout(() => {{
+      gmBubbleText.textContent = tip.bubble;
+      gmBubbleText.style.opacity = '1';
+    }}, 250);
 
-    render_html("""
-    <div class="simple-footer">
-        CyberSentinel · Simple, private, instant link safety checks.
-    </div>
-    """)
+    // Grandma react animation
+    grandmaContainer.classList.remove('grandma-react');
+    void grandmaContainer.offsetWidth;
+    grandmaContainer.classList.add('grandma-react');
+
+    // Reset intro text
+    lessonIntro.textContent = '"Come here, dear. Let me show you how to stay safe online."';
+  }}
+
+  // Initialize first tip
+  renderTip(0, false);
+
+  nextBtn.addEventListener('click', () => {{
+    if (currentTip < tips.length - 1) {{
+      currentTip++;
+      renderTip(currentTip, false);
+    }} else {{
+      // Completed
+      dots.forEach(dot => dot.classList.add('done'));
+      dots.forEach(dot => dot.classList.remove('active'));
+      progressCounter.textContent = '06 / 06';
+      renderTip(currentTip, true);
+    }}
+  }});
+
+  prevBtn.addEventListener('click', () => {{
+    if (currentTip > 0) {{
+      currentTip--;
+      renderTip(currentTip, false);
+    }}
+  }});
+
+}})();
+</script>
+</body>
+</html>
+"""
+
+    components.html(safety_tips_html, height=2200, scrolling=False)
 
 
 # ==============================================================================
